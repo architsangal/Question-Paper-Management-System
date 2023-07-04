@@ -1,0 +1,36 @@
+server:
+  port: 8090
+  
+spring:    
+  cloud:
+    gateway:
+      routes:
+      - id: AUTHOR-SERVICE
+        uri:
+          lb://AUTHOR-SERVICE
+        predicates:
+        - Path=/author/**
+        
+      - id: ITEM-SERVICE
+        uri:
+          lb://ITEM-SERVICE
+        predicates:
+        - Path=/item/**
+
+      - id: PAPER-GEN-SERVICE
+        uri:
+          lb://PAPER-GEN-SERVICE
+        predicates:
+        - Path=/paper/**
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              
+  application:
+    name: API_GATEWAY
